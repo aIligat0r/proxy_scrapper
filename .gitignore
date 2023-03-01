@@ -2,5 +2,5 @@
 __pycache__
 *.log
 *.txt
+*.exe
 !requirements.txt
-geckodriver.exe
