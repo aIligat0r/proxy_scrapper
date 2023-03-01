@@ -1,4 +1,4 @@
-# SOCKS5 proxy scrapper
+# SOCKS5 proxies scrapper
 
 ### Get socks5 proxies from:
 * http://free-proxy.cz
