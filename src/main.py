@@ -7,5 +7,5 @@ def main():
     checker.ProxyChecker(socks5_list).run()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

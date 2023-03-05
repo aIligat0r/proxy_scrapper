@@ -19,6 +19,7 @@ class Socks5Scrapper:
     """
     Free SOCKS5 resources parser
     """
+
     HEADERS = fake_headers.Headers(headers=True).generate()
 
     def __init__(self):
@@ -33,22 +34,21 @@ class Socks5Scrapper:
         html = self.get_page(url)
         ips = html.find_all("td", {"class": "left", "style": "text-align:center"})
         ports = html.find_all("span", {"class": "fport"})
-        return [
-            '%s:%s' % (ips[i].text, ports[i].text) for i in range(len(ips))
-        ]
+        return ["%s:%s" % (ips[i].text, ports[i].text) for i in range(len(ips))]
 
     def spys_one(self):
         url = "https://spys.one/socks/"
         html = self.get_page(url)
-        ips = html.find_all("tr", {"onmouseover": re.compile(r"this.style.background=")})
+        ips = html.find_all(
+            "tr", {"onmouseover": re.compile(r"this.style.background=")}
+        )
         return [re.sub("SOCKS5.*", "", socks.text) for socks in ips]
 
     def hidemy_name(self):
         url = "https://hidemy.name/ru/proxy-list/?type=5#list"
         html = BeautifulSoup(
-            str(
-                self.get_page(url).find_all("div", {"class": "table_block"})
-            ), "html.parser"
+            str(self.get_page(url).find_all("div", {"class": "table_block"})),
+            "html.parser",
         )
         ips = html.find_all("td")
         result = []
@@ -66,7 +66,9 @@ class Socks5Scrapper:
         html = self.get_page(url)
         ips = html.find_all("td", {"class": "show-ip-div"})
         ports = html.find_all("a", {"href": re.compile(r"/?port=\d*")})
-        return [ips[i].text.replace("\n", "") + ":" + ports[i].text for i in range(len(ips))]
+        return [
+            ips[i].text.replace("\n", "") + ":" + ports[i].text for i in range(len(ips))
+        ]
 
     def proxy_list_download(self):
         url = "https://www.proxy-list.download/SOCKS5"
@@ -77,8 +79,9 @@ class Socks5Scrapper:
         try:
             for ip in range(len(ips)):
                 result.append(
-                    ips[i].text.replace("\n", "").replace(" ", "") + ":" + ips[i + 1]
-                    .text.replace("\n", "").replace(" ", "")
+                    ips[i].text.replace("\n", "").replace(" ", "")
+                    + ":"
+                    + ips[i + 1].text.replace("\n", "").replace(" ", "")
                 )
                 i += 5
         except:
@@ -88,8 +91,17 @@ class Socks5Scrapper:
     def proxydocker_com(self):
         url = "https://www.proxydocker.com/en/socks5-list/"
         html = self.get_page(url)
-        return [socks.text for socks in
-                html.find_all("a", {"href": re.compile(r"https://www\.proxydocker\.com/en/proxy/\d\d?\d?\d?\.")})]
+        return [
+            socks.text
+            for socks in html.find_all(
+                "a",
+                {
+                    "href": re.compile(
+                        r"https://www\.proxydocker\.com/en/proxy/\d\d?\d?\d?\."
+                    )
+                },
+            )
+        ]
 
     def vpnside_com(self):
         url = "https://www.vpnside.com/proxy/list/"
@@ -99,10 +111,12 @@ class Socks5Scrapper:
         socks = []
         for i in range(25):
             ip = self.driver.find_element(
-                By.XPATH, f'/html/body/div[1]/div[3]/div/main/article/div/div/div/table/tbody/tr[{i + 1}]/td[1]'
+                By.XPATH,
+                f"/html/body/div[1]/div[3]/div/main/article/div/div/div/table/tbody/tr[{i + 1}]/td[1]",
             ).text
             port = self.driver.find_element(
-                By.XPATH, f'/html/body/div[1]/div[3]/div/main/article/div/div/div/table/tbody/tr[{i + 1}]/td[2]'
+                By.XPATH,
+                f"/html/body/div[1]/div[3]/div/main/article/div/div/div/table/tbody/tr[{i + 1}]/td[2]",
             ).text
             socks.append(f"{ip}:{port}")
         return socks
@@ -120,9 +134,11 @@ class Socks5Scrapper:
         return list(set(socks))
 
     def geonode_com(self):
-        url = "https://proxylist.geonode.com/api/proxy-list?" \
-              "limit=500&page=1&sort_by=lastChecked" \
-              "&sort_type=desc&protocols=socks5"
+        url = (
+            "https://proxylist.geonode.com/api/proxy-list?"
+            "limit=500&page=1&sort_by=lastChecked"
+            "&sort_type=desc&protocols=socks5"
+        )
         socks = []
         for retry in range(3):
             try:
@@ -141,7 +157,7 @@ class Socks5Scrapper:
             "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks5.txt",
             "https://raw.githubusercontent.com/HyperBeats/proxy-list/main/socks5.txt",
             "https://raw.githubusercontent.com/baklazhan1337/proxier/main/socks5.txt",
-            "https://raw.githubusercontent.com/MuRongPIG/Proxy-Master/main/socks5.txt"
+            "https://raw.githubusercontent.com/MuRongPIG/Proxy-Master/main/socks5.txt",
         ]
         for url in repos_urls:
             response = requests.get(url)
@@ -152,8 +168,10 @@ class Socks5Scrapper:
     def _args_conf():
         parser = argparse.ArgumentParser()
         parser.add_argument(
-            "-d", "--driver", help="get socks5 via driver (from dynamic content resources)",
-            action="store_true"
+            "-d",
+            "--driver",
+            help="get socks5 via driver (from dynamic content resources)",
+            action="store_true",
         )
         return parser.parse_args()
 
@@ -162,7 +180,7 @@ class Socks5Scrapper:
         socks_list = []
         resources = {
             "geonode.com": self.geonode_com(),
-            "github": self.github_public_repos()
+            "github": self.github_public_repos(),
         }
         if args.driver:
             self.driver = get_driver()
@@ -175,7 +193,7 @@ class Socks5Scrapper:
                     "proxy-list.download": self.proxy_list_download(),
                     "proxydocker.com": self.proxydocker_com(),
                     "vpnside.com": self.vpnside_com(),
-                    "premiumproxy.net": self.premiumproxy_net()
+                    "premiumproxy.net": self.premiumproxy_net(),
                 }
             )
             self.driver.close()
