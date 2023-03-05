@@ -1,8 +1,8 @@
 from multiprocessing.dummy import Pool
 
+import urllib3
 import requests
 import fake_headers
-import urllib3
 from tqdm import tqdm
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -41,7 +41,6 @@ class ProxyChecker:
                 return socks
             except:
                 pass
-        ProxyChecker._save_socks("-" + socks + '\n')
         return False
 
     def pool_requests(self):
