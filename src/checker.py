@@ -19,7 +19,7 @@ with open("../socks_list/%s" % OUT_FILENAME, 'w') as file:
 class ProxyChecker:
     """
     SOCKS5 checker via HTTP requests
-    Save good results to 'sockList/checked_socks.txt'
+    Save good results to 'socks_list/checked_socks.txt'
     """
     HEADERS = fake_headers.Headers(headers=True).generate()
 

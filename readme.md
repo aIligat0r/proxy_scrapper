@@ -32,7 +32,7 @@ Without using the Firefox webdriver:
 $ python main.py
 ```
 
-After receiving the socks5 proxy list, the proxies are checked using HTTP requests (script checker.py).
+After receiving the socks5 proxy list, the proxies are checked using HTTP requests (script `checker.py`).
 
 The available socks5 proxies are stored in the `socks_list/` directory.
 

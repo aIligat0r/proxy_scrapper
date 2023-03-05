@@ -16,6 +16,9 @@ def get_driver():
 
 
 class Socks5Scrapper:
+    """
+    Free SOCKS5 resources parser
+    """
     HEADERS = fake_headers.Headers(headers=True).generate()
 
     def __init__(self):
